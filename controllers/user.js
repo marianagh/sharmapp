@@ -311,6 +311,20 @@ exports.getForgot = (req, res) => {
 };
 
 /**
+ * GET /linked-accounts
+ * Linked accounts
+ */
+exports.getSocial = (req, res) => {
+  // if (req.user) {
+  //   return res.redirect('/');
+  // }
+  res.render('account/social', {
+    title: 'Linked Accounts'
+  });
+};
+
+
+/**
  * POST /forgot
  * Create a random token, then the send user an email with a reset link.
  */
