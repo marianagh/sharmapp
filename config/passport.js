@@ -453,8 +453,8 @@ passport.use('foursquare', new OAuth2Strategy({
 passport.use(new OpenIDStrategy({
   apiKey: process.env.STEAM_KEY,
   providerURL: 'http://steamcommunity.com/openid',
-  returnURL: 'http://localhost:3000/auth/steam/callback',
-  realm: 'http://localhost:3000/',
+  returnURL: 'http://localhost:8080/auth/steam/callback',
+  realm: 'http://localhost:8080/',
   stateless: true
 }, (identifier, done) => {
   const steamId = identifier.match(/\d+$/)[0];
