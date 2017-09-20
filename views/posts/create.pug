@@ -1,0 +1,64 @@
+extends ../layout
+//-  text: String,
+//-      photo: { String},
+//-      user: {
+//-          type: mongoose.Schema.Types.ObjectId,
+//-          ref: 'User'
+//-         },
+//-      postOn: {Date},
+//-      postTo: {
+//-          facebook: Boolean,
+//-          twitter: Boolean,
+//-          instagram: Boolean, 
+//-          google: Boolean
+//-         }
+block content
+  h1 Create new post
+  p.lead Fill in the post data and set social networks to post it.
+  hr
+  .row
+    form.form-horizontal(action='/posts',enctype='multipart/form-data',method='POST')
+    input(type='hidden', name='_csrf', value=_csrf)
+    .form-group
+      label.col-sm-3.control-label(for='text') Content
+      .col-sm-7
+          textarea(name="description", cols="40", rows="5")
+    .form-group
+      label.col-sm-3.control-label(for='photo') Photo
+      .col-sm-7
+        input(type='file', name='myFile')
+    .form-group
+      label.col-sm-3.control-label(for="date") Date
+      .col-sm-7
+        input(type="text" placeholder="")#select-date
+    h3#selected-date
+    .datepicker#date-picker
+    .form-group
+      label.col-sm-3.control-label(for='post')
+      .col-sm-7
+        .col-sm-3
+          input.checkbox-input(type='checkbox', name='facebook', id=facebook, value=true, checked=true)
+          i.fa.fa-facebook
+          label(for=facebook) Facebook
+        .col-sm-3
+          input.checkbox-input(type='checkbox', name='instagram', id=instagram, value=true, checked=true)
+          i.fa.fa-instagram 
+          label(for=facebook) Instagram
+        .col-sm-3
+          input.checkbox-input(type='checkbox', name='twitter', id=twitter, value=true, checked=true)
+          i.fa.fa-twitter 
+          label(for=facebook) Twitter
+        .col-sm-3
+          input.checkbox-input(type='checkbox', name='google', id=google, value=true, checked=true)
+          i.fa.fa-google-plus
+          label(for=google) Google+  
+    .form-group
+      .col-sm-7
+        button.btn.btn-primary(type='submit') 
+          i.fa.fa-send
+          | Post Now
+  append script
+  script.
+   $(function () {
+                $('#datetimepicker1').datetimepicker();
+            });

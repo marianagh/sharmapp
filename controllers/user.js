@@ -312,12 +312,12 @@ exports.getForgot = (req, res) => {
 
 /**
  * GET /linked-accounts
- * Linked accounts
+ * Linked accounts page
  */
 exports.getSocial = (req, res) => {
-  // if (req.user) {
-  //   return res.redirect('/');
-  // }
+  if (!req.user) {
+    return res.redirect('/');
+  }
   res.render('account/social', {
     title: 'Linked Accounts'
   });
