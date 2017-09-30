@@ -46,15 +46,9 @@ exports.postCreate = (req, res, next) => {
     req.checkBody('text', 'Content is required').notEmpty(); 
     req.sanitize('text').escape();
     req.sanitize('text').trim();
-    
 
-  const errors = req.validationErrors();
+    const errors = req.validationErrors();
 
-  if (errors) {
-    req.flash('errors', errors);
-    return res.redirect('/posts');
-  }
-  else{
     const post = new Post({
       text: req.body.text,
       user: req.body.user,
@@ -66,18 +60,22 @@ exports.postCreate = (req, res, next) => {
         google: req.body.google
       }
     });
-    
-    post.save((err)=> {
-      if (err) {return next(err); }
-      req.post(post, (err)=> {
-        if (err) {
-          return next(err);
-        }
-        res.redirect('posts/')
-      });
-    });
-  }
 
+    if (errors) {
+      res.render('posts/create', {tittle: 'Create post', post: post, errors: errors});
+      return;
+    }
+    else{ 
+      post.save((err)=> {
+        if (err) {return next(err); }
+        req.post(post, (err)=> {
+          if (err) {
+            return next(err);
+          }
+          res.redirect('posts/')
+        });
+      });
+    }
 };
 
 

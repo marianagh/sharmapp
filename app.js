@@ -137,9 +137,14 @@ app.post('/account/password', passportConfig.isAuthenticated, userController.pos
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
 app.get('/linked-accounts', userController.getSocial);
-app.get('/posts', postController.getPosts);
-app.get('/posts/create', postController.getCreate);
-app.get('/posts', postController.postCreate);
+app.route('/posts', postController)
+  .get(postController.getPosts)
+  .post(postController.postCreate)
+  .put(postController.postUpdate)
+  .delete(postController.postDelete);
+app.get('/posts/create',postController.getCreate);
+
+
 
 /**
  * API examples routes.
