@@ -5,16 +5,23 @@ const passport = require('passport');
 const Post = require('../models/Post');
 
 /**
+ * GET /post
+ * Single post page.
+ */
+exports.getPost = (req, res) => {
+  res.render('post/profile', {
+    title: 'View Post',
+    post: post
+  });
+};
+
+/**
  * GET /posts
  * All posts.
  */
 exports.getPosts = (req, res) => {
-    if (req.post) {
-      return res.redirect('/');
-    }
-    res.render('posts/all', {
-      title: 'My Posts',
-      posts: Post.find()
+    Post.find((err, docs) => {
+      res.render('posts/all', { posts: docs });
     });
   };
 
@@ -36,6 +43,10 @@ exports.getCreate = (req, res) => {
  * Create a new post.
  */
 exports.postCreate = (req, res, next) => {
+    req.checkBody('text', 'Content is required').notEmpty(); 
+    req.sanitize('text').escape();
+    req.sanitize('text').trim();
+    
 
   const errors = req.validationErrors();
 
@@ -43,38 +54,33 @@ exports.postCreate = (req, res, next) => {
     req.flash('errors', errors);
     return res.redirect('/posts');
   }
-  const post = new Post({
-    text: req.body.text,
-    user: req.body.user,
-    postOn: req.body.date, 
-    postTo: {
-      facebook: req.body.facebook, 
-      twitter: req.body.twitter, 
-      instagram: req.body.instagram,
-      google: req.body.google
-    }
-  });
-  
-  post.save((err)=> {
-    if (err) {return next(err); }
-    req.post(post, (err)=> {
-      if (err) {
-        return next(err);
+  else{
+    const post = new Post({
+      text: req.body.text,
+      user: req.body.user,
+      postOn: req.body.date, 
+      postTo: {
+        facebook: req.body.facebook, 
+        twitter: req.body.twitter, 
+        instagram: req.body.instagram,
+        google: req.body.google
       }
-      res.redirect('/posts')
     });
-  });
+    
+    post.save((err)=> {
+      if (err) {return next(err); }
+      req.post(post, (err)=> {
+        if (err) {
+          return next(err);
+        }
+        res.redirect('posts/')
+      });
+    });
+  }
+
 };
 
-/**
- * GET /posts
- * Post page.
- */
-exports.getPost = (req, res) => {
-  res.render('post/profile', {
-    title: 'View Post'
-  });
-};
+
 
 
 /**
@@ -117,7 +123,7 @@ exports.getPost = (req, res) => {
  */
 exports.postUpdate = (req, res, next) => {
  
-  Post.findById(req.post.id, (err, post) => {
+  Post.findByIdAndUpdate(req.post.id, (err, post) => {
     if (err) { return next(err); }
     post.text = req.body.text || '';
     post.postOn = req.body.date;
@@ -133,5 +139,17 @@ exports.postUpdate = (req, res, next) => {
       req.flash('success', { msg: 'Post has been updated.' });
       res.redirect('/posts');
     });
+  });
+};
+
+/**
+ * POST /posts/
+ * Delete post.
+ */
+exports.postDelete = (req, res, next) => {
+  Post.findByIdAndRemove({ _id: req.post.id }, (err) => {
+    if (err) { return next(err); }
+    req.logout();
+    res.redirect('/posts');
   });
 };

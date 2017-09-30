@@ -1,23 +1,10 @@
 extends ../layout
-//-  text: String,
-//-      photo: { String},
-//-      user: {
-//-          type: mongoose.Schema.Types.ObjectId,
-//-          ref: 'User'
-//-         },
-//-      postOn: {Date},
-//-      postTo: {
-//-          facebook: Boolean,
-//-          twitter: Boolean,
-//-          instagram: Boolean, 
-//-          google: Boolean
-//-         }
 block content
   h1 Create new post
   p.lead Fill in the post data and set social networks to post it.
   hr
   .row
-    form.form-horizontal(action='/posts',enctype='multipart/form-data',method='POST')
+    form.form-horizontal(method="POST")
     input(type='hidden', name='_csrf', value=_csrf)
     .form-group
       label.col-sm-3.control-label(for='text') Content
@@ -28,11 +15,13 @@ block content
       .col-sm-7
         input(type='file', name='myFile')
     .form-group
-      label.col-sm-3.control-label(for="date") Date
-      .col-sm-7
-        input(type="text" placeholder="")#select-date
-    h3#selected-date
-    .datepicker#date-picker
+      label.col-sm-12.control-label(for="date") Date
+      .col-sm-6
+        input(type="text" placeholder="Select")#select-date
+      script.
+          (function () {
+                $('#select-date').datetimepicker();
+            });
     .form-group
       label.col-sm-3.control-label(for='post')
       .col-sm-7
@@ -52,13 +41,11 @@ block content
           input.checkbox-input(type='checkbox', name='google', id=google, value=true, checked=true)
           i.fa.fa-google-plus
           label(for=google) Google+  
+   
     .form-group
       .col-sm-7
-        button.btn.btn-primary(type='submit') 
-          i.fa.fa-send
-          | Post Now
-  append script
-  script.
-   $(function () {
-                $('#datetimepicker1').datetimepicker();
-            });
+        input.btn.btn-primary(type='submit' value="Create")
+  if errors 
+    ul
+      for error in errors
+        li!= error.msg

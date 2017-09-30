@@ -139,6 +139,7 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
 app.get('/linked-accounts', userController.getSocial);
 app.get('/posts', postController.getPosts);
 app.get('/posts/create', postController.getCreate);
+app.get('/posts', postController.postCreate);
 
 /**
  * API examples routes.

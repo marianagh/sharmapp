@@ -490,10 +490,10 @@ exports.getPayPal = (req, res, next) => {
       cancel_url: process.env.PAYPAL_CANCEL_URL
     },
     transactions: [{
-      description: 'Hackathon Starter',
+      description: 'Sharmapp',
       amount: {
         currency: 'USD',
-        total: '1.99'
+        total: '5.00'
       }
     }]
   };
